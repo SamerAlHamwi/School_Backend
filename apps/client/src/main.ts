@@ -53,7 +53,7 @@ async function bootstrap() {
       }),
     );
 
-    app.useWebSocketAdapter(new RedisIoAdapter(app));
+    // app.useWebSocketAdapter(new RedisIoAdapter(app));
 
     const configService = app.select(SharedModule).get(ConfigService);
     const adminConfig = fs.readFileSync('./serviceAccountKey.json', 'utf8');
