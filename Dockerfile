@@ -1,24 +1,20 @@
 FROM node:14-alpine
 
 # Create app directory
-WORKDIR /app
+WORKDIR /AKENZY/src/app
 
 # Install app dependencies
 COPY package*.json ./
 COPY yarn.lock ./
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 # Bundle app source
 COPY . .
 
-# Build the application
 RUN yarn build
 
-# Expose ports
 EXPOSE 3000
 EXPOSE 5000
 
-# Start the application
-CMD [ "yarn", "start:dev" ]
+CMD [ "yarn", "start:prod" ]

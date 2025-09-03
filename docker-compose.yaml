@@ -1,47 +1,50 @@
-version: '3.8'
+version: '3.7'
 
 services:
   app:
+    container_name: nest
     build: .
-    container_name: nest-app
     ports:
-      - "80:3000"
-      - "5000:5000"   # Socket port
+      - 8080:3000
     volumes:
-      - .:/app
-      - /app/node_modules
-    command: yarn start:dev
+      - ./:/AKENZY/src/app
+      - /AKENZY/src/app/node_modules
+    networks:
+      - common
     environment:
-      NODE_ENV: production
-      JWT_SECRET: "AKENZY"
+      NODE_ENV: development
+      JWT_SECRET: AKENZY
       HOST: 0.0.0.0
       PORT: 3000
       HOST_SOCKET: 0.0.0.0
       PORT_SOCKET: 5000
       MONGODB_URI: mongodb://mongo:27017/2School
       SALT_OF_ROUNDS: 10
-      SWAGGER_PATH: "/api/docs"
-      SWAGGER_TITLE: "2School"
-      SWAGGER_DESCRIPTION: "The 2 2School API Description"
-      SWAGGER_VERSION: "beta"
-      SWAGGER_SCHEME: "http"
-      FIREBASE_PROJECT_ID: "cloudmate-243bf"
-      FIREBASE_PRIVATE_KEY: "AAAAULInp_w:APA91bHxHC0eoUhhMd_fgxk6IW0MSv1MPMSuxzJBigEF6EdGU-oaQwM6945gDGTE3eMS0Sqp0kz1UeFyb8nTL3MjuonCwaJZBNJiFjJ4UGWhCX5tbz96qwu2kTqAS3y2C04dQji1tEuE"
-      FIREBASE_CLIENT_EMAIL: "lamhan3012@gmail.com"
+      SWAGGER_PATH: /api/docs
+      SWAGGER_TITLE: 2School
+      SWAGGER_DESCRIPTION: The 2 2School API Description
+      SWAGGER_VERSION: beta
+      SWAGGER_SCHEME: http
+      FIREBASE_PROJECT_ID: cloudmate-243bf
+      FIREBASE_PRIVATE_KEY: AAAAULInp_w:APA91bHxHC0eoUhhMd_fgxk6IW0MSv1MPMSuxzJBigEF6EdGU-oaQwM6945gDGTE3eMS0Sqp0kz1UeFyb8nTL3MjuonCwaJZBNJiFjJ4UGWhCX5tbz96qwu2kTqAS3y2C04dQji1tEuE
+      FIREBASE_CLIENT_EMAIL: lamhan3012@gmail.com
     depends_on:
       - mongo
-    restart: unless-stopped
 
   mongo:
-    image: mongo:5
-    container_name: mongo-db
+    container_name: mongo
+    image: mongo:latest
     ports:
-      - "27017:27017"
+      - 27017:27017
     volumes:
-      - mongodb_data:/data/db
+      - mongo_data:/data/db
+    networks:
+      - common
     environment:
       MONGO_INITDB_DATABASE: 2School
-    restart: unless-stopped
+
+networks:
+  common:
 
 volumes:
-  mongodb_data:
+  mongo_data:
