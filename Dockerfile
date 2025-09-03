@@ -1,7 +1,7 @@
 FROM node:14-alpine
 
 # Create app directory
-WORKDIR /AKENZY/src/app
+WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
