@@ -17,4 +17,4 @@ RUN yarn build
 EXPOSE 3000
 EXPOSE 5000
 
-CMD [ "yarn", "start:prod" ]
+CMD [ "node", "dist/apps/client/main.js" ]
