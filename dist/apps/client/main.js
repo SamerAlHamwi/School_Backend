@@ -10764,7 +10764,7 @@ async function bootstrap() {
                 target: false,
             },
         }));
-        app.useWebSocketAdapter(new RedisIoAdapter_1.RedisIoAdapter(app));
+        // app.useWebSocketAdapter(new RedisIoAdapter_1.RedisIoAdapter(app));
         const configService = app.select(shared_module_1.SharedModule).get(config_service_1.ConfigService);
         const adminConfig = fs.readFileSync('./serviceAccountKey.json', 'utf8');
         fire.initializeApp({
