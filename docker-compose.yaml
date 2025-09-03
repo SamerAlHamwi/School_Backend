@@ -19,6 +19,8 @@ services:
       HOST_SOCKET: 0.0.0.0
       PORT_SOCKET: 5000
       MONGODB_URI: mongodb://mongo:27017/2School
+      REDIS_HOST: redis  
+      REDIS_PORT: 6379   
       SALT_OF_ROUNDS: 10
       SWAGGER_PATH: /api/docs
       SWAGGER_TITLE: 2School
@@ -30,6 +32,7 @@ services:
       FIREBASE_CLIENT_EMAIL: lamhan3012@gmail.com
     depends_on:
       - mongo
+      - redis 
 
   mongo:
     container_name: mongo
@@ -42,9 +45,20 @@ services:
       - common
     environment:
       MONGO_INITDB_DATABASE: 2School
+  redis:  
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - common
+    restart: unless-stopped
 
 networks:
   common:
 
 volumes:
   mongo_data:
+  redis_data:
