@@ -1,24 +1,24 @@
-
-FROM node:14-alpine 
-
+FROM node:18-alpine
 
 # Create app directory
-WORKDIR /AKENZY/src/app
+WORKDIR /app
 
 # Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
 COPY package*.json ./
-# COPY yarn.lock ./
+COPY yarn.lock ./
 
-RUN npm i
-# If you are building your code for production
-# RUN npm ci --only=productiondo
+# Install dependencies
+RUN yarn install --frozen-lockfile
 
 # Bundle app source
 COPY . .
 
-RUN npm run build
+# Build the application
+RUN yarn build
 
+# Expose ports
 EXPOSE 3000
-CMD [ "node", "dist/apps/client/main.js" ]
+EXPOSE 5000
+
+# Start the application
+CMD [ "yarn", "start:dev" ]

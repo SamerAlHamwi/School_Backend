@@ -1,42 +1,53 @@
-version: '3.7'
+version: '3.8'
 
 services:
   app:
-    container_name: nest
-    image: lamhan3012/nest-docker:latest
+    build: .
+    container_name: nest-app
     ports:
-      - 8080:3000
+      - "8080:3000"   # External:Internal
+      - "5000:5000"   # For socket if needed
     volumes:
-      - nest:/data/app
-    command: yarn dev
+      - .:/AKENZY/src/app
+      - /AKENZY/src/app/node_modules
+    command: yarn start:dev
     networks:
-      - common
+      - app-network
     environment:
       NODE_ENV: development
-      JWT_SECRET: AKENZY
+      JWT_SECRET: "AKENZY"
       HOST: 0.0.0.0
       PORT: 3000
-      MONGODB_URI: mongodb://mongo/nest_school
+      HOST_SOCKET: 0.0.0.0
+      PORT_SOCKET: 5000
+      MONGODB_URI: mongodb://mongo:27017/2School
       SALT_OF_ROUNDS: 10
-      #SWAGGER
-      SWAGGER_PATH: /api/docs
-      SWAGGER_TITLE: 2School
-      SWAGGER_DESCRIPTION: The 2 2School API Description
-      SWAGGER_VERSION: beta
-      SWAGGER_SCHEME: http
+      SWAGGER_PATH: "/api/docs"
+      SWAGGER_TITLE: "2School"
+      SWAGGER_DESCRIPTION: "The 2 2School API Description"
+      SWAGGER_VERSION: "beta"
+      SWAGGER_SCHEME: "http"
+      FIREBASE_PROJECT_ID: "cloudmate-243bf"
+      FIREBASE_PRIVATE_KEY: "AAAAULInp_w:APA91bHxHC0eoUhhMd_fgxk6IW0MSv1MPMSuxzJBigEF6EdGU-oaQwM6945gDGTE3eMS0Sqp0kz1UeFyb8nTL3MjuonCwaJZBNJiFjJ4UGWhCX5tbz96qwu2kTqAS3y2C04dQji1tEuE"
+      FIREBASE_CLIENT_EMAIL: "lamhan3012@gmail.com"
+    depends_on:
+      - mongo
 
   mongo:
-    container_name: mongo
-    image: mongo
+    image: mongo:5
+    container_name: mongo-db
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
-      - nest:/data/db
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: 2School
     networks:
-      - common
+      - app-network
 
 networks:
-  common:
+  app-network:
+    driver: bridge
 
-volumes: 
-  nest: {}
+volumes:
+  mongodb_data:
