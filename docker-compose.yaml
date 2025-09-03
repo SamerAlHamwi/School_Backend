@@ -5,16 +5,14 @@ services:
     build: .
     container_name: nest-app
     ports:
-      - "8080:3000"   # External:Internal
-      - "5000:5000"   # For socket if needed
+      - "80:3000"   # Changed to port 80 for HTTP
+      - "443:5000"   # For SSL if needed
     volumes:
-      - .:/AKENZY/src/app
-      - /AKENZY/src/app/node_modules
+      - .:/app
+      - /app/node_modules
     command: yarn start:dev
-    networks:
-      - app-network
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
       JWT_SECRET: "AKENZY"
       HOST: 0.0.0.0
       PORT: 3000
@@ -27,11 +25,9 @@ services:
       SWAGGER_DESCRIPTION: "The 2 2School API Description"
       SWAGGER_VERSION: "beta"
       SWAGGER_SCHEME: "http"
-      FIREBASE_PROJECT_ID: "cloudmate-243bf"
-      FIREBASE_PRIVATE_KEY: "AAAAULInp_w:APA91bHxHC0eoUhhMd_fgxk6IW0MSv1MPMSuxzJBigEF6EdGU-oaQwM6945gDGTE3eMS0Sqp0kz1UeFyb8nTL3MjuonCwaJZBNJiFjJ4UGWhCX5tbz96qwu2kTqAS3y2C04dQji1tEuE"
-      FIREBASE_CLIENT_EMAIL: "lamhan3012@gmail.com"
     depends_on:
       - mongo
+    restart: unless-stopped
 
   mongo:
     image: mongo:5
@@ -42,12 +38,7 @@ services:
       - mongodb_data:/data/db
     environment:
       MONGO_INITDB_DATABASE: 2School
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
+    restart: unless-stopped
 
 volumes:
   mongodb_data:
